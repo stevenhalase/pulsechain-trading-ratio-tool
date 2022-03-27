@@ -1,0 +1,7 @@
+{
+  "name": "PulseChain: Trading Ratio Tool",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
