@@ -1,0 +1,7 @@
+<ion-icon name="sunny-outline"></ion-icon>
+<ion-toggle
+  [checked]="(theme$ | async) === ThemesEnum.DARK"
+  color="dark"
+  (ionChange)="toggle($event)"
+></ion-toggle>
+<ion-icon name="moon-outline"></ion-icon>

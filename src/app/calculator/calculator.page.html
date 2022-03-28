@@ -1,0 +1,240 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start" class="logo-container">
+      <img src="/assets/LogoVector.svg" class="logo" />
+      <img
+        [src]="(theme$ | async) === ThemesEnum.LIGHT ? lightWordmark : darkWordmark"
+        class="wordmark"
+      />
+      <span class="logo-subtitle">Trading Ratio Tool</span>
+    </ion-buttons>
+    <!-- <ion-buttons slot="end">
+      <app-theme-toggle></app-theme-toggle>
+    </ion-buttons> -->
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-chip color="warning">
+    <ion-icon name="alert-circle-outline"></ion-icon>
+    <ion-label color="dark">
+      This application is in no way affiliated with PulseChain or it's
+      developers.
+    </ion-label>
+  </ion-chip>
+
+  <ion-chip color="secondary">
+    <ion-icon name="information-circle-outline"></ion-icon>
+    <ion-label color="dark">
+      This data applies to ${{ (coin$ | async).toUpperCase() }} token aquisition
+      via hex swap ingress
+    </ion-label>
+  </ion-chip>
+
+  <ion-card class="coin-toggle-container">
+    <ion-segment [value]="coin$ | async" (ionChange)="coinChanged($event)">
+      <ion-segment-button *ngFor="let coin of coins" [value]="coin">
+        <ion-label>{{ coin.toUpperCase() }}</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-card>
+
+  <form [formGroup]="calculusForm">
+    <ion-card color="secondary">
+      <ion-card-header>
+        <ion-card-subtitle>
+          Enter these two fields, all others will be automatically calculated
+        </ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item>
+          <div class="api-toggle">
+            Use API for Current HEX price (field will be locked)
+            <ion-toggle
+              [checked]="(useAPI$ | async) === true"
+              color="primary"
+              (ionChange)="toggleUseAPI($event)"
+            ></ion-toggle>
+            <ion-icon
+              name="refresh-circle-outline"
+              (click)="refreshHexPrice()"
+            ></ion-icon>
+          </div>
+          <div *ngIf="useAPI$ | async" class="api-timestamp">
+            Price Timestamp: {{ (hexQuoteDate$ | async)?.toLocaleString() }}
+          </div>
+          <div *ngIf="useAPI$ | async" class="api-timestamp">
+            Refreshed At: {{ (hexQuoteRefreshDate$ | async)?.toLocaleString() }}
+          </div>
+          <ion-label position="floating">Current HEX per $USD</ion-label>
+          <ion-input
+            type="number"
+            [readonly]="(useAPI$ | async) === true"
+            formControlName="currentHexPerUSD"
+          ></ion-input>
+        </ion-item>
+        <hr />
+        <ion-item>
+          <ion-label position="floating"
+            >Current ${{ (coin$ | async).toUpperCase() }} per HEX</ion-label
+          >
+          <ion-input
+            type="number"
+            formControlName="currentPLSPerHex"
+          ></ion-input>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-subtitle>At Sacrifice</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content formGroupName="atSacrifice">
+        <ion-item>
+          <ion-label position="floating"
+            >Average USD / ${{ (coin$ | async).toUpperCase() }}</ion-label
+          >
+          <ion-input
+            type="number"
+            value="0"
+            readonly
+            formControlName="averageUSDPerPLS"
+          ></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating"
+            >${{ (coin$ | async).toUpperCase() }} per $USD</ion-label
+          >
+          <ion-input
+            type="number"
+            value="0"
+            readonly
+            formControlName="plsPerUSD"
+          ></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating"
+            >Current ${{ (coin$ | async).toUpperCase() }} / HEX</ion-label
+          >
+          <ion-input
+            type="number"
+            value="0"
+            readonly
+            formControlName="currentPLSPerHexAtSacrifice"
+          ></ion-input>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <ion-card-content>
+        <ion-item>
+          <ion-label position="floating">HEX per USD</ion-label>
+          <ion-input
+            type="number"
+            value="0"
+            readonly
+            formControlName="hexPerUSD"
+          ></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">X you are paying</ion-label>
+          <ion-input
+            type="number"
+            value="0"
+            readonly
+            formControlName="xYouArePaying"
+          ></ion-input>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <ion-card-content>
+        <ion-item>
+          <ion-label position="floating"
+            >${{ (coin$ | async).toUpperCase() }} per HEX @ sac</ion-label
+          >
+          <ion-input
+            type="number"
+            value="0"
+            readonly
+            formControlName="plsPerHexAtSacrifice"
+          ></ion-input>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card color="primary">
+      <ion-card-header>
+        <ion-card-title>Cheat Sheet</ion-card-title>
+        <ion-card-subtitle>
+          The current HEX value is X higher than sac price
+        </ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <div formGroupName="cheat">
+          <ion-item>
+            <ion-label position="floating">2x of sac price</ion-label>
+            <ion-input
+              type="number"
+              value="0"
+              readonly
+              formControlName="x2"
+            ></ion-input>
+          </ion-item>
+          <hr />
+          <ion-item>
+            <ion-label position="floating">3x of sac price</ion-label>
+            <ion-input
+              type="number"
+              value="0"
+              readonly
+              formControlName="x3"
+            ></ion-input>
+          </ion-item>
+          <hr />
+          <ion-item>
+            <ion-label position="floating">4x of sac price</ion-label>
+            <ion-input
+              type="number"
+              value="0"
+              readonly
+              formControlName="x4"
+            ></ion-input>
+          </ion-item>
+          <hr />
+          <ion-item>
+            <ion-label position="floating">5x of sac price</ion-label>
+            <ion-input
+              type="number"
+              value="0"
+              readonly
+              formControlName="x5"
+            ></ion-input>
+          </ion-item>
+          <hr />
+          <ion-item>
+            <ion-label position="floating">10x of sac price</ion-label>
+            <ion-input
+              type="number"
+              value="0"
+              readonly
+              formControlName="x10"
+            ></ion-input>
+          </ion-item>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </form>
+
+  <ion-chip color="secondary" class="nomics">
+    <ion-icon name="information-circle-outline"></ion-icon>
+    <a href="https://nomics.com">
+      <ion-label color="dark">
+        Crypto Market Cap & Pricing Data Provided By Nomics
+      </ion-label>
+    </a>
+  </ion-chip>
+</ion-content>

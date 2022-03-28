@@ -1,0 +1,77 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start" class="logo-container">
+      <img src="/assets/LogoVector.svg" class="logo" />
+      <img
+        [src]="(theme$ | async) === ThemesEnum.LIGHT ? lightWordmark : darkWordmark"
+        class="wordmark"
+      />
+      <span class="logo-subtitle">Trading Ratio Tool</span>
+    </ion-buttons>
+    <!-- <ion-buttons slot="end">
+      <app-theme-toggle></app-theme-toggle>
+    </ion-buttons> -->
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-chip color="warning">
+    <ion-icon name="alert-circle-outline"></ion-icon>
+    <ion-label color="dark">
+      This application is in no way affiliated with PulseChain or it's
+      developers.
+    </ion-label>
+  </ion-chip>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Donate</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <div>
+        Donations go towards development costs, primarily we would like to
+        release the application for iOS, which has a steep developer account
+        creation cost.
+      </div>
+      <div>
+        In order to continue to support regular updates to PulseChain: Trading
+        Ratio Tool, feel free to donate via the QR code below.
+      </div>
+      <a
+        href="https://etherscan.io/address/0xaa7c3177d34a8da20d77811a07d4a9ca7289d763"
+        class="donation-link"
+      >
+        <img src="/assets/donate-qr.svg" class="donation-qr" />
+      </a>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Donations</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <div class="wallet-value">
+        Wallet Value:
+        <span class="value"> {{ walletValue$ | async }} </span>
+      </div>
+
+      <div class="wallet-transactions">
+        <div
+          *ngFor="let tokenTransfer of (walletTokenTransfers$ | async)?.slice(0, 10)"
+          class="transaction"
+        >
+          <ion-item color="primary" class="transfer">
+            <ion-label> {{ tokenTransfer.tokenSymbol }} </ion-label>
+            <ion-label class="transfer-value">
+              {{ Number(tokenTransfer.value) / Math.pow(10,
+              Number(tokenTransfer.tokenDecimal)) }}
+            </ion-label>
+          </ion-item>
+        </div>
+      </div>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

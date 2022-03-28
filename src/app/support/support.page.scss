@@ -1,0 +1,71 @@
+ion-toolbar {
+  .logo {
+    width: 17px;
+    margin: 0 5px 0 14px;
+  }
+
+  .wordmark {
+    width: 100px;
+    margin-right: 5px;
+  }
+
+  .logo-subtitle {
+    font-size: 10px;
+    margin-top: 6px;
+  }
+}
+
+ion-chip {
+  height: auto;
+  margin: 15px 15px 0;
+}
+
+ion-card {
+  margin: 16px;
+}
+
+ion-card-content {
+  div {
+    margin: 5px 0;
+  }
+}
+
+.donation-link {
+  display: flex;
+  justify-content: center;
+}
+
+.donation-qr {
+  max-width: 350px;
+  margin-top: 5px;
+}
+
+.wallet-value {
+  display: flex;
+  align-items: center;
+}
+
+.value {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--ion-color-primary);
+  margin-left: 5px;
+}
+
+.transaction {
+  display: flex;
+  flex-direction: column;
+}
+
+.transfer {
+  ::ng-deep {
+    ion-label {
+      text-overflow: initial;
+      overflow: initial;
+    }
+  }
+}
+
+.transfer-value {
+  text-align: end;
+}

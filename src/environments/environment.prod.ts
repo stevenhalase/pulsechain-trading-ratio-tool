@@ -1,3 +1,5 @@
 export const environment = {
-  production: true
+  ETHERSCAN_API_KEY: '',
+  NOMICS_API_KEY: '',
+  production: true,
 };

@@ -1,0 +1,47 @@
+ion-toolbar {
+  .logo {
+    width: 17px;
+    margin: 0 5px 0 14px;
+  }
+
+  .wordmark {
+    width: 100px;
+    margin-right: 5px;
+  }
+
+  .logo-subtitle {
+    font-size: 10px;
+    margin-top: 6px;
+  }
+}
+
+ion-chip {
+  height: auto;
+  margin: 15px 15px 0;
+}
+
+.coin-toggle-container {
+  margin-top: 15px;
+}
+
+.nomics {
+  margin: 0 15px 15px;
+}
+
+.api-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  width: 100%;
+  margin: 5px 0;
+
+  ion-icon {
+    font-size: 26px;
+  }
+}
+
+.api-timestamp {
+  font-size: 11px;
+  color: #969696;
+}
