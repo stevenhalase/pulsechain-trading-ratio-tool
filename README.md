@@ -8,7 +8,6 @@ Application Repo for PulseChain Trading Ratio
 
 ## Tech Stack
 
-
 [![Angular 13](/badges/angular-13.svg)](https://angular.io/)
 
 [![Ionic 6](/badges/ionic-6.svg)](https://ionicframework.com/)
@@ -23,6 +22,6 @@ In Progress of being published on Play Store
 
 ## Data Sources
 
-[![Nomics](/badges/nomic-hex-price.svg)](https://nomics.com/)
+[![Nomics](/badges/nomics-hex-price.svg)](https://nomics.com/)
 
-[![Etherscan](/badges/etherscan-donation-waller-value_transactions.svg)](https://etherscan.io/)
+[![Etherscan](/badges/etherscan-donation-wallet-value_transactions.svg)](https://etherscan.io/)
