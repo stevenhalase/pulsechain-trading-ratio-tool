@@ -1,3 +1,20 @@
+@keyframes rotating {
+  from {
+    -ms-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  to {
+    -ms-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
 ion-toolbar {
   .logo {
     width: 17px;
@@ -17,15 +34,23 @@ ion-toolbar {
 
 ion-chip {
   height: auto;
-  margin: 15px 15px 0;
+  margin: 0 15px 15px;
+  background-color: #1c1c1c;
 }
 
 .coin-toggle-container {
   margin-top: 15px;
 }
 
-.nomics {
-  margin: 0 15px 15px;
+.current-hex-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.api-toggle-container {
+  display: flex;
+  flex-direction: column;
 }
 
 .api-toggle {
@@ -41,7 +66,51 @@ ion-chip {
   }
 }
 
+.api-status-container {
+  display: flex;
+  align-items: center;
+}
+
 .api-timestamp {
   font-size: 11px;
   color: #969696;
+}
+
+.api-status {
+  font-size: 11px;
+  margin-right: 5px;
+}
+
+.hex-quote-error {
+  margin: 0;
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+
+  ion-icon {
+    font-size: 16px;
+    margin-right: 5px;
+  }
+}
+
+.api-refresh {
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.load-success-icon {
+  &.loading {
+    animation: rotating 2s linear infinite;
+  }
+}
+
+.api-toggle-label {
+  display: flex;
+  flex-direction: column;
+
+  .meta {
+    font-size: 11px;
+    color: #969696;
+  }
 }

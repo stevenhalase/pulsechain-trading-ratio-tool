@@ -6,10 +6,17 @@ import {
   ThemesEnum,
   ThemeService,
 } from '../services';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, interval, Observable, timer } from 'rxjs';
 
 import { IRawCurrencyTicker } from 'nomics';
-import { map, shareReplay } from 'rxjs/operators';
+import {
+  map,
+  shareReplay,
+  switchMap,
+  takeUntil,
+  takeWhile,
+  tap,
+} from 'rxjs/operators';
 
 export enum CoinsEnum {
   PLS = 'pls',
@@ -35,12 +42,19 @@ export class CalculatorPage implements OnInit {
   private _coin = new BehaviorSubject<CoinsEnum>(CoinsEnum.PLS);
   coin$ = this._coin.asObservable();
 
-  private _useAPI = new BehaviorSubject<boolean>(true);
+  private _useAPI = new BehaviorSubject<boolean>(false);
   useAPI$ = this._useAPI.asObservable();
 
   hexQuote$: Observable<IRawCurrencyTicker>;
   hexQuoteDate$: Observable<Date>;
   hexQuoteRefreshDate$: Observable<Date>;
+  hexQuoteError$: Observable<boolean>;
+
+  private _hexQuoteLoading = new BehaviorSubject<boolean>(false);
+  hexQuoteLoading$ = this._hexQuoteLoading.asObservable();
+
+  private _hexQuoteDestroy = new BehaviorSubject<boolean>(true);
+  hexQuoteDestroy$ = this._hexQuoteDestroy.asObservable();
 
   constructor(
     private _calculatorService: CalculatorService,
@@ -90,25 +104,42 @@ export class CalculatorPage implements OnInit {
     this.calculusForm.controls.currentPLSPerHex.setValue(646);
 
     this.useAPI$.subscribe((useAPI) => {
-      this.hexQuote$ = this._coinPriceService
-        .getCoinQuote('HEX')
-        .pipe(shareReplay(1));
-
-      this.hexQuoteDate$ = this.hexQuote$.pipe(
-        map((hexQuote) => new Date(hexQuote?.price_timestamp))
-      );
-
-      this.hexQuoteRefreshDate$ = this.hexQuote$.pipe(map(() => new Date()));
-
-      let hexQuoteSub = null;
       if (useAPI) {
-        hexQuoteSub = this.hexQuote$.subscribe((hexQuote) => {
-          this.calculusForm.controls.currentHexPerUSD.setValue(hexQuote.price);
+        this._hexQuoteDestroy.next(false);
+        this.hexQuote$ = timer(0, 60000).pipe(
+          takeWhile(() => !this._hexQuoteDestroy.value),
+          tap(() => this._hexQuoteLoading.next(true)),
+          switchMap((_) => this._coinPriceService.getCoinQuote('HEX')),
+          tap((hexQuote) => {
+            this._hexQuoteLoading.next(false);
+            if (!hexQuote) {
+              this._hexQuoteDestroy.next(true);
+            }
+          }),
+          shareReplay(1)
+        );
+
+        this.hexQuoteError$ = this.hexQuote$.pipe(map((hexQuote) => !hexQuote));
+
+        this.hexQuoteDate$ = this.hexQuote$.pipe(
+          map((hexQuote) =>
+            hexQuote ? new Date(hexQuote.price_timestamp) : null
+          )
+        );
+
+        this.hexQuoteRefreshDate$ = this.hexQuote$.pipe(
+          map((hexQuote) => (hexQuote ? new Date() : null))
+        );
+
+        this.hexQuote$.subscribe((hexQuote) => {
+          if (hexQuote) {
+            this.calculusForm.controls.currentHexPerUSD.setValue(
+              hexQuote.price
+            );
+          }
         });
       } else {
-        if (hexQuoteSub) {
-          hexQuoteSub.unsubscribe();
-        }
+        this._hexQuoteDestroy.next(true);
       }
     });
   }

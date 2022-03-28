@@ -15,21 +15,13 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-chip color="warning">
-    <ion-icon name="alert-circle-outline"></ion-icon>
-    <ion-label color="dark">
-      This application is in no way affiliated with PulseChain or it's
-      developers.
-    </ion-label>
-  </ion-chip>
-
-  <ion-chip color="secondary">
+  <!-- <ion-chip color="secondary">
     <ion-icon name="information-circle-outline"></ion-icon>
     <ion-label color="dark">
       This data applies to ${{ (coin$ | async).toUpperCase() }} token aquisition
       via hex swap ingress
     </ion-label>
-  </ion-chip>
+  </ion-chip> -->
 
   <ion-card class="coin-toggle-container">
     <ion-segment [value]="coin$ | async" (ionChange)="coinChanged($event)">
@@ -48,30 +40,59 @@
       </ion-card-header>
       <ion-card-content>
         <ion-item>
-          <div class="api-toggle">
-            Use API for Current HEX price (field will be locked)
-            <ion-toggle
-              [checked]="(useAPI$ | async) === true"
-              color="primary"
-              (ionChange)="toggleUseAPI($event)"
-            ></ion-toggle>
-            <ion-icon
-              name="refresh-circle-outline"
-              (click)="refreshHexPrice()"
-            ></ion-icon>
+          <div class="current-hex-container">
+            <div class="api-toggle-container">
+              <div class="api-toggle">
+                <span class="api-toggle-label">
+                  <span>Use API for Current HEX price</span>
+                  <span class="meta">(auto-updates every 1 minute)</span>
+                  <span class="meta">(field will be locked)</span>
+                </span>
+                <ion-toggle
+                  [checked]="(useAPI$ | async) === true"
+                  color="primary"
+                  (ionChange)="toggleUseAPI($event)"
+                ></ion-toggle>
+                <!-- <ion-icon
+                  *ngIf="useAPI$ | async"
+                  name="refresh-circle-outline"
+                  class="api-refresh"
+                  (click)="refreshHexPrice()"
+                ></ion-icon> -->
+              </div>
+            </div>
+            <div *ngIf="useAPI$ | async" class="api-status-container">
+              <span class="api-status">API Status:</span>
+              <span
+                *ngIf="hexQuoteError$ | async; else success"
+                class="hex-quote-error"
+              >
+                <ion-icon name="alert-circle-outline" color="danger"></ion-icon>
+                Failed
+              </span>
+              <ng-template #success>
+                <ion-icon
+                  [name]="(hexQuoteLoading$ | async) ? 'refresh-circle-outline' : 'checkmark-circle-outline'"
+                  color="success"
+                  class="load-success-icon"
+                  [class.loading]="hexQuoteLoading$ | async"
+                ></ion-icon>
+              </ng-template>
+            </div>
+            <div *ngIf="useAPI$ | async" class="api-timestamp">
+              Price Timestamp: {{ (hexQuoteDate$ | async)?.toLocaleString() }}
+            </div>
+            <div *ngIf="useAPI$ | async" class="api-timestamp">
+              Refreshed At: {{ (hexQuoteRefreshDate$ | async)?.toLocaleString()
+              }}
+            </div>
+            <ion-label position="floating">Current HEX per $USD</ion-label>
+            <ion-input
+              type="number"
+              [readonly]="(useAPI$ | async) === true"
+              formControlName="currentHexPerUSD"
+            ></ion-input>
           </div>
-          <div *ngIf="useAPI$ | async" class="api-timestamp">
-            Price Timestamp: {{ (hexQuoteDate$ | async)?.toLocaleString() }}
-          </div>
-          <div *ngIf="useAPI$ | async" class="api-timestamp">
-            Refreshed At: {{ (hexQuoteRefreshDate$ | async)?.toLocaleString() }}
-          </div>
-          <ion-label position="floating">Current HEX per $USD</ion-label>
-          <ion-input
-            type="number"
-            [readonly]="(useAPI$ | async) === true"
-            formControlName="currentHexPerUSD"
-          ></ion-input>
         </ion-item>
         <hr />
         <ion-item>
@@ -228,6 +249,22 @@
       </ion-card-content>
     </ion-card>
   </form>
+
+  <ion-chip color="warning">
+    <ion-icon name="alert-circle-outline"></ion-icon>
+    <ion-label color="dark">
+      This application is in no way affiliated with PulseChain or it's
+      developers.
+    </ion-label>
+  </ion-chip>
+
+  <ion-chip color="warning">
+    <ion-icon name="alert-circle-outline"></ion-icon>
+    <ion-label color="dark">
+      Nothing in this application constitutes professional and/or financial
+      advice.
+    </ion-label>
+  </ion-chip>
 
   <ion-chip color="secondary" class="nomics">
     <ion-icon name="information-circle-outline"></ion-icon>

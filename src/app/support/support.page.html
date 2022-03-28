@@ -15,13 +15,26 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-chip color="warning">
-    <ion-icon name="alert-circle-outline"></ion-icon>
-    <ion-label color="dark">
-      This application is in no way affiliated with PulseChain or it's
-      developers.
-    </ion-label>
-  </ion-chip>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Contact Us</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <div>
+        Feel free to contact us via Twitter or by opening an issue on Github.
+      </div>
+      <a href="https://twitter.com/NW_Hexan" class="twitter-link">
+        <img src="/assets/twitter-logo.svg" class="twitter-logo" />
+      </a>
+      <a
+        href="https://github.com/stevenhalase/pulsechain-trading-ratio-tool"
+        class="github-link"
+      >
+        <img src="/assets/github-logo.svg" class="github-logo" />
+      </a>
+    </ion-card-content>
+  </ion-card>
 
   <ion-card>
     <ion-card-header>
@@ -74,4 +87,20 @@
       </div>
     </ion-card-content>
   </ion-card>
+
+  <ion-chip color="warning">
+    <ion-icon name="alert-circle-outline"></ion-icon>
+    <ion-label color="dark">
+      This application is in no way affiliated with PulseChain or it's
+      developers.
+    </ion-label>
+  </ion-chip>
+
+  <ion-chip color="warning">
+    <ion-icon name="alert-circle-outline"></ion-icon>
+    <ion-label color="dark">
+      Nothing in this application constitutes professional and/or financial
+      advice.
+    </ion-label>
+  </ion-chip>
 </ion-content>

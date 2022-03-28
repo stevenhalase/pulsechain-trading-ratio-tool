@@ -17,7 +17,8 @@ ion-toolbar {
 
 ion-chip {
   height: auto;
-  margin: 15px 15px 0;
+  margin: 0 15px 15px;
+  background-color: #1c1c1c;
 }
 
 ion-card {
@@ -68,4 +69,10 @@ ion-card-content {
 
 .transfer-value {
   text-align: end;
+}
+
+.twitter-logo,
+.github-logo {
+  width: 50px;
+  margin: 10px 10px 0 0;
 }
