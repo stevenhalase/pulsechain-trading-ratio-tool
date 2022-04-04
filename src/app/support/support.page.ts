@@ -42,8 +42,8 @@ export class SupportPage implements OnInit {
   ngOnInit(): void {
     this.theme$ = this._themeService.theme$;
 
-    this.walletValue$ = this._walletValueService.getWalletValue();
-    this.walletTokenTransfers$ =
-      this._walletValueService.getWalletTokenTransfers();
+    // this.walletValue$ = this._walletValueService.getWalletValue();
+    // this.walletTokenTransfers$ =
+    //   this._walletValueService.getWalletTokenTransfers();
   }
 }
